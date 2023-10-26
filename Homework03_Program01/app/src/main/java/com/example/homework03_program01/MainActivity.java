@@ -30,13 +30,23 @@ public class MainActivity extends AppCompatActivity
 
         addEmployeeIntent = new Intent(MainActivity.this, AddEmployee.class);
 
-        addButtonEventListener();
+        listOfUsers = new ArrayList<User>();
+
+        lv_j_employees.setAdapter(adapter);
 
         Intent cameFrom = getIntent();
 
-        User userPassed = (User) cameFrom.getSerializableExtra("User");
+        Bundle infoPassedToMe = cameFrom.getExtras();
 
-        addUser(userPassed);
+        if(infoPassedToMe != null)
+        {
+            User userPassed = (User) cameFrom.getSerializableExtra("User");
+
+            listOfUsers.add(userPassed);
+
+        }
+
+        addButtonEventListener();
     }
 
     public void addButtonEventListener()
@@ -50,11 +60,4 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
-
-    public void addUser(User user)
-    {
-
-    }
-
-
 }
