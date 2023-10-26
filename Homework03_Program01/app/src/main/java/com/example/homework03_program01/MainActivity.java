@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity
     ListView lv_j_employees;
     Button btn_j_add;
     Intent addEmployeeIntent;
-    ArrayList<User> listOfUsers;
+    static ArrayList<User> listOfUsers = new ArrayList<User>();
     UserListAdapter adapter;
 
     @Override
@@ -25,27 +25,33 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //GUI to code connections
         lv_j_employees = findViewById(R.id.lv_v_employees);
         btn_j_add = findViewById(R.id.btn_v_add);
 
+        //create new instance of intent addEmployee
         addEmployeeIntent = new Intent(MainActivity.this, AddEmployee.class);
 
-        listOfUsers = new ArrayList<User>();
-
-        lv_j_employees.setAdapter(adapter);
+        initializeListView();
 
         Intent cameFrom = getIntent();
 
+        //get info from intent
         Bundle infoPassedToMe = cameFrom.getExtras();
 
+        //if there is info
         if(infoPassedToMe != null)
         {
+            //get info called User
             User userPassed = (User) cameFrom.getSerializableExtra("User");
 
+            //add user to the list of users
             listOfUsers.add(userPassed);
 
+            adapter.notifyDataSetChanged();
         }
 
+        //listen for a press of add employee button
         addButtonEventListener();
     }
 
@@ -55,9 +61,23 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 //Log.d("Button pressed", "========");
+
+                //start add employee intent
                 startActivity(addEmployeeIntent);
 
             }
         });
     }
+
+    public void initializeListView()
+    {
+        //create new instance of an Array List of Users stored in listOfUsers
+        listOfUsers = new ArrayList<User>();
+
+        adapter = new UserListAdapter(this, listOfUsers);
+
+        //set custom adapter called adapter to the list view
+        lv_j_employees.setAdapter(adapter);
+    }
+
 }

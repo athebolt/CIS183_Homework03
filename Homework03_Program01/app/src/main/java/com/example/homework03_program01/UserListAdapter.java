@@ -47,14 +47,14 @@ public class UserListAdapter extends BaseAdapter
 
         //find the GUI elements in my custom cell
         TextView name = view.findViewById(R.id.tv_v_cc_name);
-        TextView email = view.findViewById(R.id.tv_v_cc_uName);
+        TextView uName = view.findViewById(R.id.tv_v_cc_uName);
 
         //get the user at position i (i is passed to this function)
         User user = listOfUsers.get(i);
 
         //set the GUI for the custom_cell.xml
-        name.setText(user.getlName() + ", " + user.getfName());
-        email.setText(user.getuName());
+        name.setText(user.getfName() + " " + user.getlName());
+        uName.setText(user.getuName());
 
         //return the view we created.
         return view;

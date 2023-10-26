@@ -50,7 +50,7 @@ public class AddEmployee extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Log.d("Add Employee", "====");
+                //Log.d("Add Employee", "====");
 
                 user = new User(et_j_a_fName.getText().toString(),
                                 et_j_a_lName.getText().toString(),
