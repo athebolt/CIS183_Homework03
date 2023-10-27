@@ -176,41 +176,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
         return usernames;
     }
 
-    @SuppressLint("Range")
-    public ArrayList<String> getAllFirstnames()
-    {
-        //used to store firstnames that were returned from the db
-        ArrayList<String> firstnames = new ArrayList<String>();
-
-        //used to get all firstnames from the table
-        String selectUsernames = "SELECT firstname FROM " + TABLE_NAME + " ORDER BY username;";
-
-        //readable database to read all entries
-        SQLiteDatabase db = getReadableDatabase();
-
-        //execute query to selectUsernames, cursor cycling through each entry
-        Cursor cursor = db.rawQuery(selectUsernames, null);
-
-        //variable to store usernames in the entries
-        String firstname;
-
-        if(cursor.moveToFirst())
-        {
-            do
-            {
-                firstname = cursor.getString(cursor.getColumnIndex("firstname"));
-
-                firstnames.add(firstname);
-            }
-            while (cursor.moveToNext());
-        }
-
-        //c
-        db.close();
-
-        return firstnames;
-    }
-
     public void deleteUser(String uName)
     {
         //get writeable instance of database
