@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class AddEmployee extends AppCompatActivity
 {
@@ -17,10 +20,13 @@ public class AddEmployee extends AppCompatActivity
     EditText et_j_a_uName;
     EditText et_j_a_pass;
     EditText et_j_a_age;
+    TextView tv_j_a_error;
     Button btn_j_a_add;
     Button btn_j_a_back;
     Intent mainActivityIntent;
     User user;
+    DatabaseHelper dbHelper;
+    ArrayList<String> usernames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -34,13 +40,18 @@ public class AddEmployee extends AppCompatActivity
         et_j_a_uName = findViewById(R.id.et_v_a_uName);
         et_j_a_pass = findViewById(R.id.et_v_a_pass);
         et_j_a_age = findViewById(R.id.et_v_a_age);
+        tv_j_a_error = findViewById(R.id.tv_v_a_error);
         btn_j_a_add = findViewById(R.id.btn_v_a_add);
         btn_j_a_back = findViewById(R.id.btn_v_a_back);
 
-        addButtonEventHandler();
-        backButtonEventHandler();
+        dbHelper = new DatabaseHelper(this);
+
+        usernames = dbHelper.getAllUsernames();
 
         mainActivityIntent = new Intent(AddEmployee.this, MainActivity.class);
+
+        addButtonEventHandler();
+        backButtonEventHandler();
     }
 
     public void addButtonEventHandler()
@@ -50,17 +61,37 @@ public class AddEmployee extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Log.d("Add Employee", "====");
+                //Log.d("Add Employee", "====");
 
-                user = new User(et_j_a_fName.getText().toString(),
+                if(!et_j_a_fName.getText().toString().equals("") &&
+                        !et_j_a_lName.getText().toString().equals("") &&
+                        !et_j_a_email.getText().toString().equals("") &&
+                        !et_j_a_uName.getText().toString().equals("") &&
+                        !et_j_a_pass.getText().toString().equals("") &&
+                        !et_j_a_age.getText().toString().equals(""))
+                {
+
+                    if(isUsernameUnique())
+                    {
+                        //getting text from gui and storing it into a new user
+                        user = new User(et_j_a_fName.getText().toString(),
                                 et_j_a_lName.getText().toString(),
                                 et_j_a_email.getText().toString(),
                                 et_j_a_uName.getText().toString(),
                                 et_j_a_pass.getText().toString(),
                                 et_j_a_age.getText().toString());
 
-                mainActivityIntent.putExtra("User", user);
-                startActivity(mainActivityIntent);
+                        Log.d("Adding user", "=-==");
+                        dbHelper.addNewEmployee(user);
+
+                        startActivity(mainActivityIntent);
+                    }
+                }
+                else
+                {
+                    tv_j_a_error.setText("ERROR: Please fill all fields!");
+                    tv_j_a_error.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -75,5 +106,23 @@ public class AddEmployee extends AppCompatActivity
                 startActivity(mainActivityIntent);
             }
         });
+    }
+
+    public boolean isUsernameUnique()
+    {
+        for(int i = 0; i < usernames.size(); i++)
+        {
+            Log.d("Username: ", usernames.get(i) + "");
+
+            if(usernames.get(i).equals(et_j_a_uName.getText().toString()))
+            {
+                tv_j_a_error.setText("ERROR: Username already taken!");
+                tv_j_a_error.setVisibility(View.VISIBLE);
+
+                return false;
+            }
+        }
+
+        return true;
     }
 }
