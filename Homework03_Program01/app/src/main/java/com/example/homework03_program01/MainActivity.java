@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity
             User userPassed = (User) cameFrom.getSerializableExtra("User");
 
             listOfUsers.add(userPassed);
-
         }
 
         addButtonEventListener();
